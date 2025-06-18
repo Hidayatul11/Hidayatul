@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidayatul Widianti_2213034080</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        #maps { height: 50vh; }
+        .container {
+            max-width: 900px;
+            padding: 70px;
+            border-radius: 0px;
+            box-shadow: 20px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <b><font size="4" color="black">PETA SEBARAN RUMAH SAKIT PROVINSI LAMPUNG</font></b><br>
+    </center>
+    <br>
+    Peta ini menggambarkan sebaran rumah sakit di 13 kabupaten dan 2 kota di Provinsi Lampung. Peta ini menunjukkan lokasi rumah 
+    sakit di seluruh wilayah provinsi, memungkinkan identifikasi visual distribusi fasilitas kesehatan tersebut di berbagai daerah administratif.<br>
+
+    <center><div id="maps" class="container"></div>
+	<b><font size="2" color="black">Hidayatul Widianti</font></b><br>
+	<b><font size="2" color="black">2213034080</font></b><br>
+	<b><font size="2" color="black">Pendidikan Geografi</font></b><br>
+	</center>
+
+    <script>
+        var map = L.map('maps').setView([-4.574184695076195, 105.12825219529034], 7.5);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        function popUp(feature, layer) {
+            var out = [];
+            if (feature.properties) {
+                for (var key in feature.properties) {
+                    out.push(key + ": " + feature.properties[key]);
+                }
+                layer.bindPopup(out.join("<br />"));
+            }
+        }
+
+        function stylePolygon(feature) {
+            return {
+                color: "green",
+                weight: 2,
+                fillColor: "lightgreen",
+                fillOpacity: 0.3
+            };
+        }
+
+        $.getJSON("Prov.Lampung.geojson", function(data) {
+            L.geoJSON(data, {
+                onEachFeature: popUp,
+                style: stylePolygon
+            }).addTo(map);
+        });
+
+        var greenIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var rumahSakit = [
+            { 
+			nama: "RSUD Dr. H. Abdul Moeloek",
+			koordinat: [-5.39735, 105.26737],
+			alamat: "Bandar Lampung" 
+			},
+            { 
+			nama: "RS Advent Bandar Lampung",
+			koordinat: [-5.40155, 105.26492], 
+			alamat: "Bandar Lampung" 
+			},
+            { 
+			nama: "RS Mitra Husada",
+			koordinat: [-5.10634, 104.01255],
+			alamat: "Pringsewu"
+			},
+            {
+			nama: "RSUD Liwa",
+			koordinat: [-5.04991, 104.07871], 
+			alamat: "Lampung Barat"
+			},
+            {
+			nama: "RSU Ahmad Yani Metro",
+			koordinat: [-5.11016, 105.30859], 
+			alamat: "Metro"
+			},
+            { 
+			nama: "RSUD Sukadana",
+			koordinat: [-5.08317, 105.61391], 
+			alamat: "Lampung Timur" 
+			},
+            {
+			nama: "RSU Handayani",
+			koordinat: [-4.83827, 105.19774], 
+			alamat: "Kotabumi, Lampung Utara" 
+			},
+            {
+			nama: "RS Batin Mangunang", 
+			koordinat: [-5.35211, 104.97208],
+			alamat: "Kota Agung, Tanggamus" 
+			},
+            {
+			nama: "RSUD Ragab Begawe Caram",
+			koordinat: [-4.04137, 105.45880],
+			alamat: "Mesuji"
+			},
+            { 
+			nama: "RSU Tulang Bawang",
+			koordinat: [-4.19596, 105.22671],
+			alamat: "Menggala, Tulang Bawang" 
+			},
+            {
+			nama: "RSUD Tulang Bawang Barat",
+			koordinat: [-4.53321, 104.61105],
+			alamat: "Panaragan, Tulang Bawang Barat" 
+			},
+            { 
+			nama: "RSUD Pesawaran",
+			koordinat: [-5.47534, 105.04583],
+			alamat: "Pesawaran" 
+			},
+            {
+			nama: "RSUD Demang Sepulau Raya",
+			koordinat: [-4.82029, 105.23423],
+			alamat: "Lampung Tengah" 
+			},
+            {
+			nama: "RSUD Zainal Abidin Pagar Alam", 
+			koordinat: [-4.59111, 104.40385],
+			alamat: "Way Kanan" 
+			},
+            {
+			nama: "RSUD KH. Ahmad Dahlan", 
+			koordinat: [-5.05680, 103.90459],
+			alamat: "Krui, Pesisir Barat"
+			},
+            { 
+			nama: "RSIA Permata Hati",
+			koordinat: [-5.71968, 105.60908],
+			alamat: "Lampung Selatan" 
+			}
+        ];
+
+        rumahSakit.forEach(function(rs) {
+            L.marker(rs.koordinat, { icon: greenIcon })
+             .addTo(map)
+             .bindPopup("<b>" + rs.nama + "</b><br>" + rs.alamat);
+        });
+    </script>
+</body>
+</html>
